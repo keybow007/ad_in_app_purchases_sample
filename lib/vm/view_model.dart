@@ -17,7 +17,10 @@ class ViewModel extends ChangeNotifier {
     adManager.loadBannerAd();
     adManager.loadRewardAd();
     adManager.loadInterstitialAd();
-    notifyListeners();
+  }
+
+  void loadBannerAd() {
+    adManager.loadBannerAd();
   }
 
   void showRewardAd({required VoidCallback onRewardEarned}) {
@@ -27,6 +30,8 @@ class ViewModel extends ChangeNotifier {
   void showInterstitialAd({required VoidCallback onAdClosed}) {
     adManager.showInterstitialAd(onAdClosed: onAdClosed);
   }
+
+
 
 
 

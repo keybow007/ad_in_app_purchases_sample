@@ -44,21 +44,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void _initAd() {
     final vm = context.read<ViewModel>();
     vm.initAd();
-
   }
 
   //リワード獲得時の処理は関数渡しすればいい
   void _goSecondScreen() {
     final vm = context.read<ViewModel>();
     vm.showRewardAd(
-      onRewardEarned: () {
-        Navigator.push(
+      onRewardEarned: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => RewardedScreen(),
           ),
         );
+        //前の画面から戻ってきた時に再度バナー広告のロード要
+        _loadBannerAd();
       },
     );
+  }
+
+  void _loadBannerAd() {
+    final vm = context.read<ViewModel>();
+    vm.loadBannerAd();
   }
 }
