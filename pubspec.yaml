@@ -39,13 +39,15 @@ dependencies:
   #https://pub.dev/packages/provider
   provider: ^6.1.2
   #https://pub.dev/packages/google_mobile_ads
-  google_mobile_ads: ^5.2.0
+  google_mobile_ads: ^5.3.1
   #https://pub.dev/packages/purchases_flutter
-  purchases_flutter: ^8.1.5
+  purchases_flutter: ^8.7.0
   #https://pub.dev/packages/flutter_speed_dial
   flutter_speed_dial: ^7.0.0
+
+  #TODO[ATT]
   #https://pub.dev/packages/app_tracking_transparency
-  app_tracking_transparency: ^2.0.6
+  app_tracking_transparency: ^2.0.6+1
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,10 @@ import 'package:ad_in_app_purchases_sample/vm/view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/*
+* TODO サンプル用（課金アイテム登録はnet.minproで）
+* */
+
 void main() {
   runApp(
     MultiProvider(

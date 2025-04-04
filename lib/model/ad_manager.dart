@@ -12,19 +12,18 @@ class AdManager {
   InterstitialAd? interstitialAd;
   RewardedAd? rewardedAd;
 
-
   Future<void> initAd() async {
     await initAdmob();
     initBannerAd();
   }
 
-  //TODO[広告]MobileAdsSDKを初期化
+  //[広告]MobileAdsSDKを初期化
   //https://developers.google.com/admob/flutter/quick-start?hl=ja#initialize_the_mobile_ads_sdk
   Future<void> initAdmob() {
     return MobileAds.instance.initialize();
   }
 
-  //TODO[広告]バナー広告
+  //[広告]バナー広告
   //https://developers.google.com/admob/flutter/banner?hl=ja
   void initBannerAd() {
     bannerAd = BannerAd(
@@ -53,7 +52,7 @@ class AdManager {
     bannerAd = null;
   }
 
-  //TODO[広告]全画面広告
+  //[広告]全画面広告
   //https://developers.google.com/admob/flutter/interstitial?hl=ja
   Future<void> loadInterstitialAd() async {
     await InterstitialAd.load(
@@ -116,7 +115,7 @@ class AdManager {
     interstitialAd = null;
   }
 
-  //TODO[広告]リワード広告（全画面広告と同じような実装）
+  //[広告]リワード広告（全画面広告と同じような実装）
   //https://developers.google.com/admob/flutter/rewarded?hl=ja
   Future<void> loadRewardAd() async {
     await RewardedAd.load(
@@ -139,7 +138,7 @@ class AdManager {
   }
 
   //https://developers.google.com/admob/flutter/rewarded?hl=ja#display_ad
-  void showRewardAd(VoidCallback onRewardEarned) async{
+  void showRewardAd(VoidCallback onRewardEarned) async {
     if (rewardedAd == null) return;
     //FullScreenContentCallback: チュートリアルではloadメソッドに内包させているが、
     //閉じた際のコールバックをshow内に入れたいので、こっちに移動させよう
@@ -171,11 +170,11 @@ class AdManager {
       },
     );
 
-    rewardedAd?.show(onUserEarnedReward: (ad, rewardItem) {
-      onRewardEarned();
-      loadRewardAd();
-    });
+    rewardedAd?.show(
+      onUserEarnedReward: (ad, rewardItem) {
+        onRewardEarned();
+        loadRewardAd();
+      },
+    );
   }
-
-
 }

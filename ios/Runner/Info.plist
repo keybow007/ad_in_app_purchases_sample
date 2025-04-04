@@ -45,9 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<!--TODO[広告]Info.plist内にiOS用のアプリID設定
+	<!--[広告]Info.plist内にiOS用のアプリID設定
 	    https://developers.google.com/admob/flutter/quick-start?hl=ja#ios-->
 	<key>GADApplicationIdentifier</key>
     <string>ca-app-pub-5244464205108027~6644846771</string>
+    <!--TODO[ATT]
+    	    https://pub.dev/packages/app_tracking_transparency#usage-->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>この識別子は、パーソナライズされた広告を配信するために使用されます。</string>
 </dict>
 </plist>
