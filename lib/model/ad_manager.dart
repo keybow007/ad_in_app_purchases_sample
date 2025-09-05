@@ -19,8 +19,11 @@ class AdManager {
 
   //[広告]MobileAdsSDKを初期化
   //https://developers.google.com/admob/flutter/quick-start?hl=ja#initialize_the_mobile_ads_sdk
-  Future<void> initAdmob() {
-    return MobileAds.instance.initialize();
+  Future<void> initAdmob() async {
+    await MobileAds.instance.initialize();
+    loadRewardAd();
+    loadInterstitialAd();
+    initBannerAd();
   }
 
   //[広告]バナー広告

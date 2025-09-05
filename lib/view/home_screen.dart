@@ -20,7 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initAd();
+    final vm = context.read<ViewModel>();
+    vm.loadBannerAd();
   }
 
   @override
@@ -46,14 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _initAd() {
-    final vm = context.read<ViewModel>();
-    vm.initAd();
-    //TODO[ATT]
-    if (Platform.isIOS) {
-      _initAtt();
-    }
-  }
+
 
   //リワード獲得時の処理は関数渡しすればいい
   void _goSecondScreen() {

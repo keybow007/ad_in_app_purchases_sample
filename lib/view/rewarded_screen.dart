@@ -1,4 +1,7 @@
 import 'package:ad_in_app_purchases_sample/main.dart';
+import 'package:ad_in_app_purchases_sample/view/components/dialogs/delete_ad_confirm_dialog.dart';
+import 'package:ad_in_app_purchases_sample/view/components/dialogs/donation_confirm_dialog.dart';
+import 'package:ad_in_app_purchases_sample/view/components/dialogs/go_third_screen_confirm_dialog.dart';
 import 'package:ad_in_app_purchases_sample/view/third_screen.dart';
 import 'package:ad_in_app_purchases_sample/vm/view_model.dart';
 import 'package:flutter/material.dart';
@@ -29,34 +32,74 @@ class RewardedScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow
-                  ),
-                  onPressed: () => _donate(context),
-                  child: Text("投げ銭（消費型）"),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+                        onPressed: () => _donate(context),
+                        child: Text("投げ銭（消費型）"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => _goThirdScreen(context),
+                        child: Text("次の画面に進む（非消費型）"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => _deleteAd(context),
+                        child: Text("広告非表示（サブスク）"),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent
-                  ),
-                  onPressed: () => _goThirdScreen(context),
-                  child: Text("次の画面に進む（非消費型）"),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent
-                  ),
-                  onPressed: () => _deleteAd(context),
-                  child: Text("広告非表示（サブスク）"),
+
+
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                            foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => _restorePurchases(context),
+                        child: Text("購入の復元"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                            foregroundColor: Colors.white
+                        ),
+                        onPressed: () => _canselSubscription(context),
+                        child: Text("サブスクの解約"),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -80,31 +123,53 @@ class RewardedScreen extends StatelessWidget {
   }
 
   //TODO[課金]
-  void _donate(BuildContext context) {
+  void _donate(BuildContext context) async {
     //TODO 課金するか確認ダイアログ
-
-    //TODO Yesの場合は課金処理
+    final isConfirmed = await showDonationConfirmDialog(context);
+    if (isConfirmed) {
+      //TODO Yesの場合は課金処理
+      final vm = context.read<ViewModel>();
+      await vm.donate();
+      //TODO 課金が完了したらありがとうございました
+    }
   }
 
   //TODO[課金]
   void _goThirdScreen(BuildContext context) async {
     //TODO 課金するか確認ダイアログ
+    final isConfirmed = await showGoThirdScreenConfirmDialog(context);
 
-    //TODO Yesの場合は課金処理
+    if (isConfirmed) {
+      //TODO Yesの場合は課金処理
 
-    //TODO 課金が完了したら画面遷移
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ThirdScreen()),
-    );
+      //TODO 課金が完了したら画面遷移+ありがとうございました
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => ThirdScreen()),
+      );
+    }
   }
 
   //TODO[課金]
   void _deleteAd(BuildContext context) async {
     //TODO 課金するか確認ダイアログ
+    final isConfirmed = await showDeleteAdConfirmDialog(context);
 
-    //TODO Yesの場合は課金処理
+    if (isConfirmed) {
+      //TODO Yesの場合は課金処理
 
-    //TODO 課金が完了したら広告非表示
+      //TODO 課金が完了したら広告非表示+ありがとうございました
+    }
+
+  }
+
+  //TODO[課金]
+  void _restorePurchases(BuildContext context) {
+
+  }
+
+  //TODO[課金]
+  void _canselSubscription(BuildContext context) {
+
   }
 }
