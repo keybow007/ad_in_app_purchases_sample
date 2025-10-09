@@ -53,6 +53,8 @@ dependencies:
   #https://pub.dev/packages/app_tracking_transparency
   app_tracking_transparency: ^2.0.6+1
 
+  fluttertoast: ^9.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

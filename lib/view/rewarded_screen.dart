@@ -5,6 +5,7 @@ import 'package:ad_in_app_purchases_sample/view/components/dialogs/go_third_scre
 import 'package:ad_in_app_purchases_sample/view/third_screen.dart';
 import 'package:ad_in_app_purchases_sample/vm/view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class RewardedScreen extends StatelessWidget {
@@ -39,8 +40,8 @@ class RewardedScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        style:
-                            ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.yellow),
                         onPressed: () => _donate(context),
                         child: Text("投げ銭（消費型）"),
                       ),
@@ -49,8 +50,8 @@ class RewardedScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            foregroundColor: Colors.white,
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => _goThirdScreen(context),
                         child: Text("次の画面に進む（非消費型）"),
@@ -60,8 +61,8 @@ class RewardedScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            foregroundColor: Colors.white,
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => _deleteAd(context),
                         child: Text("広告非表示（サブスク）"),
@@ -70,8 +71,6 @@ class RewardedScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
-
               Container(
                 alignment: Alignment.bottomCenter,
                 child: Column(
@@ -81,8 +80,8 @@ class RewardedScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey,
-                            foregroundColor: Colors.white,
+                          backgroundColor: Colors.grey,
+                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => _restorePurchases(context),
                         child: Text("購入の復元"),
@@ -93,8 +92,7 @@ class RewardedScreen extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey,
-                            foregroundColor: Colors.white
-                        ),
+                            foregroundColor: Colors.white),
                         onPressed: () => _canselSubscription(context),
                         child: Text("サブスクの解約"),
                       ),
@@ -127,26 +125,41 @@ class RewardedScreen extends StatelessWidget {
     //TODO 課金するか確認ダイアログ
     final isConfirmed = await showDonationConfirmDialog(context);
     if (isConfirmed) {
-      //TODO Yesの場合は課金処理
+      //Yesの場合は課金処理
       final vm = context.read<ViewModel>();
       await vm.donate();
       //TODO 課金が完了したらありがとうございました
     }
   }
 
-  //TODO[課金]
+  //[課金]
   void _goThirdScreen(BuildContext context) async {
-    //TODO 課金するか確認ダイアログ
-    final isConfirmed = await showGoThirdScreenConfirmDialog(context);
-
-    if (isConfirmed) {
-      //TODO Yesの場合は課金処理
-
-      //TODO 課金が完了したら画面遷移+ありがとうございました
+    final vm = context.read<ViewModel>();
+    //チケット持ってるかの確認がいるやろ〜
+    final isGoThirdScreenEnabled = vm.isGoThirdScreenEnabled;
+    if (isGoThirdScreenEnabled) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => ThirdScreen()),
       );
+    } else {
+      //課金するか確認ダイアログ
+      final isConfirmed = await showGoThirdScreenConfirmDialog(context);
+      if (isConfirmed) {
+        await vm.purchaseGoThirdScreen();
+        //チケット持ってるかの確認がいる
+        final isGoThirdScreenEnabled = vm.isGoThirdScreenEnabled;
+        if (isGoThirdScreenEnabled) {
+          //課金に成功した場合だけ
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => ThirdScreen()),
+          );
+        } else {
+          Fluttertoast.showToast(msg: "課金アイテムを購入していないので次の画面に進めません");
+        }
+
+      }
     }
   }
 
@@ -160,16 +173,11 @@ class RewardedScreen extends StatelessWidget {
 
       //TODO 課金が完了したら広告非表示+ありがとうございました
     }
-
   }
 
   //TODO[課金]
-  void _restorePurchases(BuildContext context) {
-
-  }
+  void _restorePurchases(BuildContext context) {}
 
   //TODO[課金]
-  void _canselSubscription(BuildContext context) {
-
-  }
+  void _canselSubscription(BuildContext context) {}
 }
