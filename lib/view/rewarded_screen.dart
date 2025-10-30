@@ -113,6 +113,12 @@ class RewardedScreen extends StatelessWidget {
 
   void _backToHomeWithAd(BuildContext context) {
     final vm = context.read<ViewModel>();
+    final isDeleteAd = vm.isDeleteAd;
+
+    if (isDeleteAd) {
+      Navigator.pop(context);
+      return;
+    }
     vm.showInterstitialAd(
       onAdClosed: () {
         Navigator.pop(context);
@@ -163,16 +169,25 @@ class RewardedScreen extends StatelessWidget {
     }
   }
 
-  //TODO[課金]
+  //[課金]
   void _deleteAd(BuildContext context) async {
-    //TODO 課金するか確認ダイアログ
-    final isConfirmed = await showDeleteAdConfirmDialog(context);
+    final vm = context.read<ViewModel>();
+    final isDeleteAd = vm.isDeleteAd;
 
-    if (isConfirmed) {
-      //TODO Yesの場合は課金処理
+    if (isDeleteAd) {
 
-      //TODO 課金が完了したら広告非表示+ありがとうございました
+    } else {
+      //課金するか確認ダイアログ
+      final isConfirmed = await showDeleteAdConfirmDialog(context);
+
+      if (isConfirmed) {
+        //Yesの場合は課金処理
+        await vm.purchaseDeleteAd();
+
+      }
     }
+
+
   }
 
   //TODO[課金]

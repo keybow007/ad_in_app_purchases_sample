@@ -13,9 +13,12 @@ class BannerAdPart extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Selector<ViewModel, AdManager>(
         selector: (context, vm) => vm.adManager,
+        shouldRebuild: (_, __) => true,
         builder: (context, adManager, child) {
           final bannerAd = adManager.bannerAd;
-          if (bannerAd == null) {
+          final vm = context.read<ViewModel>();
+          final isDeleteAd = vm.isDeleteAd;
+          if (bannerAd == null || isDeleteAd) {
             return Container();
           } else {
             return Container(

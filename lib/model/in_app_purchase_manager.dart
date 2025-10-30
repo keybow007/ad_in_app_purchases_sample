@@ -11,6 +11,8 @@ class InAppPurchasesManager {
 
   bool isGoThirdScreenEnabled = false;
 
+  bool isDeleteAd = false;
+
   //課金処理の初期化
   Future<void> initInAppPurchase() async {
     //デバッグログの設定
@@ -59,6 +61,7 @@ class InAppPurchasesManager {
 
   Future<void> purchaseGoThirdScreen() async {
     final package = offerings.all["go_third_screen"]?.lifetime;
+
     if (package == null) return;
 
     try {
@@ -76,17 +79,44 @@ class InAppPurchasesManager {
         Fluttertoast.showToast(msg: "購入処理に失敗しました。");
       }
     }
+  }
 
+  Future<void> purchaseDeleteAd() async {
+    final package = offerings.all["delete_ad"]?.monthly;
+    if (package == null) return;
+
+    try {
+      final customerInfo = await Purchases.purchasePackage(package);
+      //TODO Entitlementに応じて機能設定
+      updatePurchase(customerInfo);
+
+    } on PlatformException catch (e) {
+      final errorCode = PurchasesErrorHelper.getErrorCode(e);
+      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
+        Fluttertoast.showToast(msg: "購入処理はユーザーにキャンセルされました。");
+      } else if (errorCode == PurchasesErrorCode.purchaseNotAllowedError) {
+        Fluttertoast.showToast(msg: "購入処理は許可されていません。");
+      } else {
+        Fluttertoast.showToast(msg: "購入処理に失敗しました。");
+      }
+    }
   }
 
   void updatePurchase(CustomerInfo customerInfo) {
     final entitlements = customerInfo.entitlements.all;
 
+    //次の画面にすすむ（非消費型）のentitlementの有無
     if (entitlements["go_third_screen"] == null ? false : entitlements["go_third_screen"]!.isActive){
-      //if (entitlements["go_third_screen"]!.isActive) {
       isGoThirdScreenEnabled = true;
     } else {
       isGoThirdScreenEnabled = false;
+    }
+
+    //広告非表示（サブスク）のentitlementの有無
+    if (entitlements["delete_ad"] == null ? false : entitlements["delete_ad"]!.isActive){
+      isDeleteAd = true;
+    } else {
+      isDeleteAd = false;
     }
 
   }

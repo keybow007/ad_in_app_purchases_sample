@@ -8,10 +8,14 @@ class ViewModel extends ChangeNotifier {
 
   bool get isGoThirdScreenEnabled => inAppPurchasesManager.isGoThirdScreenEnabled;
 
+  bool get isDeleteAd => inAppPurchasesManager.isDeleteAd;
+
+
 
   void initAdmob() async {
     await adManager.initAdmob();
-
+    loadBannerAd();
+    notifyListeners();
   }
 
   void loadBannerAd() {
@@ -36,9 +40,15 @@ class ViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> purchaseDeleteAd() async {
+    await inAppPurchasesManager.purchaseDeleteAd();
+    notifyListeners();
+  }
+
   //アプリ内課金処理の初期化
   void initInAppPurchase() async{
     await inAppPurchasesManager.initInAppPurchase();
+    notifyListeners();
   }
 
 

@@ -20,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    final vm = context.read<ViewModel>();
-    vm.loadBannerAd();
+    // final vm = context.read<ViewModel>();
+    // vm.loadBannerAd();
   }
 
   @override
@@ -50,20 +50,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   //リワード獲得時の処理は関数渡しすればいい
-  void _goSecondScreen() {
+  void _goSecondScreen() async {
     final vm = context.read<ViewModel>();
-    vm.showRewardAd(
-      onRewardEarned: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => RewardedScreen(),
-          ),
-        );
-        //前の画面から戻ってきた時に再度バナー広告のロード要
-        _loadBannerAd();
-      },
-    );
+    final isDeleteAd = vm.isDeleteAd;
+
+    if (isDeleteAd) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RewardedScreen(),
+        ),
+      );
+      //前の画面から戻ってきた時に再度バナー広告のロード要
+      _loadBannerAd();
+    } else {
+      vm.showRewardAd(
+        onRewardEarned: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => RewardedScreen(),
+            ),
+          );
+          //前の画面から戻ってきた時に再度バナー広告のロード要
+          _loadBannerAd();
+        },
+      );
+    }
+
   }
 
   void _loadBannerAd() {
